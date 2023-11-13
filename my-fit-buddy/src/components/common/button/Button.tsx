@@ -15,7 +15,7 @@ const buttonClassNamesFromWidth = {
   unset: "unset",
 };
 
-function getButtonClassNamesFromColor(color: string) {
+function getButtonClassNamesFromColor(color: string):string {
   return `bg-button-${color}`;
 }
 
@@ -58,9 +58,7 @@ const Button: React.FC<ButtonProps> = ({
       id={id}
       disabled={disabled ? true : false}
       onClick={onClick}
-      className={`flex justify-center items-center  ${hoverClassNames}
-        ${colorClassNames} ${disabledClassNames} ${shapeClassNames} ${typeClassNames} ${widthClassNames} 
-        `}
+      className={`flex justify-center items-center ${hoverClassNames} ${colorClassNames} ${disabledClassNames} ${shapeClassNames} ${typeClassNames} ${widthClassNames}`}
     >
       {reverseOrder ? (
         <>

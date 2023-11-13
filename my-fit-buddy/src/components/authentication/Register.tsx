@@ -1,4 +1,8 @@
 import { SyntheticEvent, useContext } from "react";
+
+import { IoIosMail } from "react-icons/io";
+import { BsFillPersonFill } from "react-icons/bs";
+
 import useFormState from "../../hooks/useFormState";
 import Input from "../common/input/Input";
 import { registerRequest } from "../../services/authenticationServices";
@@ -6,6 +10,7 @@ import { RegisterBody, RegisterFormState } from "../../ts/types";
 import { AuthContext } from "../../contexts/AuthContext";
 import Button from "../common/button/Button";
 import { Link } from "react-router-dom";
+import PasswordInput from "../common/input/PasswordInput";
 
 const initialState: RegisterFormState = {
   username: "",
@@ -50,9 +55,8 @@ const Register: React.FC = () => {
         <form className="w-full" onSubmit={onSubmitRegister}>
           <div className="flex flex-col gap-3 items-center justify-center w-full mb-7">
             <Input
-              labelText="Username"
               placeholder="Username"
-              labelName="username"
+              inputName="username"
               inputType="text"
               value={formData.username}
               isRequired={true}
@@ -60,12 +64,12 @@ const Register: React.FC = () => {
               onBlur={handleBlurValidation}
               errorMessage={errors.username}
               inputSize="full"
-              inputStyle="regular"
+              inputStyle="transparent"
+              leftIcon={<BsFillPersonFill />}
             />
             <Input
-              labelText="Email"
               placeholder="Email"
-              labelName="email"
+              inputName="email"
               inputType="email"
               value={formData.email}
               isRequired={true}
@@ -73,35 +77,20 @@ const Register: React.FC = () => {
               onBlur={handleBlurValidation}
               inputSize="full"
               errorMessage={errors.email}
-              inputStyle="regular"
+              inputStyle="transparent"
+              leftIcon={<IoIosMail />}
             />
-
-            <Input
-              labelText="Password"
-              placeholder="Password"
-              labelName="password"
-              inputType="password"
+            <PasswordInput
               value={formData.password}
-              isRequired={true}
               onChange={handleChange}
               onBlur={handleBlurValidation}
-              inputSize="full"
-              errorMessage={errors.password}
-              inputStyle="regular"
             />
-
-            <Input
-              labelText="Confirm Password"
+            <PasswordInput
+              inputName="confirm_password"
               placeholder="Confirm Password"
-              labelName="confirm_password"
-              inputType="password"
               value={formData.confirm_password}
-              isRequired={true}
               onChange={handleChange}
               onBlur={handleBlurValidation}
-              inputSize="full"
-              errorMessage={errors.confirm_password}
-              inputStyle="regular"
             />
           </div>
           <Button
@@ -110,7 +99,7 @@ const Register: React.FC = () => {
             width="full"
             shape="rectangular"
             disabled={Object.values(errors).some((error) => !!error)}
-            type = 'default'
+            type="default"
           />
         </form>
 

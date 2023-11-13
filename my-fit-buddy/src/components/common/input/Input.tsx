@@ -1,8 +1,7 @@
 import { ChangeEvent, FocusEvent, ReactNode, useState } from "react";
 
 interface InputProps {
-  labelText: string;
-  labelName: string;
+  inputName: string;
   inputType: "password" | "email" | "text";
   inputStyle: "transparent" | "regular";
   fontSizePx?: string;
@@ -30,8 +29,7 @@ const inputStylesObj = {
 };
 
 const Input: React.FC<InputProps> = ({
-  labelText,
-  labelName,
+  inputName,
   inputType,
   inputStyle = "regular",
   fontSizePx = "18px",
@@ -61,7 +59,7 @@ const Input: React.FC<InputProps> = ({
           : false,
       errorMessage: blurValidationError
         ? blurValidationError
-        : oldError.errorMessage || `${labelText} is required!`,
+        : oldError.errorMessage || `This field is required!`,
     }));
   };
 
@@ -85,8 +83,8 @@ const Input: React.FC<InputProps> = ({
           ${error.hasError ? errorInputStyles : ""}`}
         style={{ fontSize: fontSizePx }}
         type={inputType}
-        id={labelName}
-        name={labelName}
+        id={inputName}
+        name={inputName}
         placeholder={placeholder}
         onBlur={handleBlur}
         onChange={onChange}

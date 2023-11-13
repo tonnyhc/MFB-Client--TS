@@ -43,9 +43,8 @@ const Login = () => {
           <div className="flex flex-col gap-3 items-center justify-center w-full mb-7">
             <p className="text-red-400">{requestErrors}</p>
             <Input
-              labelText="Email or Username"
               placeholder="Email or Username"
-              labelName="email_or_username"
+              inputName="email_or_username"
               inputType="text"
               value={formData.email_or_username}
               isRequired={true}
