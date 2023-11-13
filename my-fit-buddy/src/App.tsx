@@ -5,12 +5,12 @@ import {Routes, Route} from 'react-router-dom'
 import Register from "./components/authentication/Register";
 import Login from "./components/authentication/Login";
 
-type Route = {
+type RouteType = {
   path: string;
   element: React.FC;
 };
 
-const routes: Route[] = [
+const routes: RouteType[] = [
   { path: "/register", element: Register },
   { path: "/login", element: Login },
 ];

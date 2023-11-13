@@ -1,4 +1,4 @@
-import { ChangeEvent, FocusEvent, useEffect, useState } from "react";
+import { ChangeEvent, FocusEvent, useState } from "react";
 
 interface InputProps {
   labelText: string;

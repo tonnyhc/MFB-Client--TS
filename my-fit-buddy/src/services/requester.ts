@@ -1,8 +1,8 @@
-type RequestMethod = "GET" | "POST" | "PATCH" | "DELETE";
+import { RequestMethod } from "../ts/types";
 
 const hostUrl = "http://localhost:8000/";
 
-const requester = async (url: string, method: RequestMethod, body?: any, token?: string) => {
+const requester = async (url: string, method: RequestMethod, body?: any, token?: string): Promise<any> => {
   if (!token) {
     const userData = JSON.parse(localStorage.getItem("userData") || "{}");
     token = userData.token || null;

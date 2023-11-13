@@ -1,28 +1,31 @@
-import { ChangeEvent, SyntheticEvent } from "react";
+import { SyntheticEvent, useContext } from "react";
 import useFormState from "../../hooks/useFormState";
 import Input from "../common/input/Input";
+import { registerRequest } from "../../services/authenticationServices";
+import { RegisterBody, RegisterFormState } from "../../ts/types";
+import { AuthContext } from "../../contexts/AuthContext";
+import Button from "../common/button/Button";
+import { Link } from "react-router-dom";
 
-type RegisterState = {
-  username: string;
-  email: string;
-  password: string;
-  confirm_password: string;
+const initialState: RegisterFormState = {
+  username: "",
+  email: "",
+  password: "",
+  confirm_password: "",
 };
 
 const Register: React.FC = () => {
-  const initialState: RegisterState = {
-    username: "",
-    email: "",
-    password: "",
-    confirm_password: "",
-  };
+  const { userLogin } = useContext(AuthContext);
   const [formData, errors, handleChange, handleBlurValidation] =
     useFormState(initialState);
 
   async function onSubmitRegister(e: SyntheticEvent): Promise<any> {
     e.preventDefault();
-    const formDataCopy = { ...formData };
-    delete formDataCopy.confirm_password;
+    const formDataCopy: RegisterBody = {
+      username: formData.username,
+      email: formData.email,
+      password: formData.password,
+    };
     try {
       const data = await registerRequest(formDataCopy);
       userLogin(data);
@@ -30,7 +33,7 @@ const Register: React.FC = () => {
     } catch (error: any) {
       if (error instanceof Error) {
         alert(error.message);
-        console.log(error.non_field_errors);
+        console.log(error);
       }
     }
   }
@@ -56,7 +59,9 @@ const Register: React.FC = () => {
               onChange={handleChange}
               onBlur={handleBlurValidation}
               errorMessage={errors.username}
-              inputSize="sm"
+              inputSize="full"
+              inputStyle="regular"
+              fontSizePx="13"
             />
             <Input
               labelText="Email"
@@ -67,8 +72,10 @@ const Register: React.FC = () => {
               isRequired={true}
               onChange={handleChange}
               onBlur={handleBlurValidation}
-              inputSize="sm"
+              inputSize="full"
               errorMessage={errors.email}
+              inputStyle="regular"
+              fontSizePx="13"
             />
 
             <Input
@@ -80,8 +87,10 @@ const Register: React.FC = () => {
               isRequired={true}
               onChange={handleChange}
               onBlur={handleBlurValidation}
-              inputSize="sm"
+              inputSize="full"
               errorMessage={errors.password}
+              inputStyle="regular"
+              fontSizePx="13"
             />
 
             <Input
@@ -93,8 +102,10 @@ const Register: React.FC = () => {
               isRequired={true}
               onChange={handleChange}
               onBlur={handleBlurValidation}
-              inputSize="sm"
+              inputSize="full"
               errorMessage={errors.confirm_password}
+              inputStyle="regular"
+              fontSizePx="13"
             />
           </div>
           <Button
@@ -103,6 +114,7 @@ const Register: React.FC = () => {
             width="full"
             shape="rectangular"
             disabled={Object.values(errors).some((error) => !!error)}
+            type = 'default'
           />
         </form>
 
