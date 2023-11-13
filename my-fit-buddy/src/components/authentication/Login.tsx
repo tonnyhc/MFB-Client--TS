@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 
+import {BsFillPersonFill} from 'react-icons/bs'
+
 import Button from "../common/button/Button";
 import Input from "../common/input/Input";
 import useFormState from "../../hooks/useFormState";
@@ -8,6 +10,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { loginRequest } from "../../services/authenticationServices";
 import { useState } from "react";
 import { LoginBody } from "../../ts/types";
+import PasswordInput from "../common/input/PasswordInput";
 
 const Login = () => {
   const initialState: LoginBody = {
@@ -50,21 +53,10 @@ const Login = () => {
               onBlur={handleBlurValidation}
               errorMessage={errors.email_or_username}
               inputSize="full"
-              inputStyle={"regular"}
+              inputStyle={"transparent"}
+              leftIcon={<BsFillPersonFill />}
             />
-            <Input
-              labelText="Password"
-              placeholder="Password"
-              labelName="password"
-              inputType="password"
-              value={formData.password}
-              isRequired={true}
-              onChange={handleChange}
-              onBlur={handleBlurValidation}
-              inputSize="full"
-              inputStyle={"regular"}
-              //   errorMessage={errors.email}
-            />
+            <PasswordInput value={formData.password} onChange={handleChange} onBlur={handleBlurValidation}/>
           </div>
           <Button
             text="Login"
