@@ -5,18 +5,10 @@ const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 const usernameRegex = /^[a-zA-Z0-9_-]{3,16}$/;
 
 type FieldType = {
-  email: string;
-  password: string;
-  confirm_password: string;
-  username: string;
   [key: string]: string;
 };
 
 type FieldErrors = {
-  email: string;
-  password: string;
-  confirm_password: string;
-  username: string;
   [key: string]: string;
 };
 

@@ -21,6 +21,6 @@ export type RegisterBody = {
 }
 
 export type LoginBody = {
-    username_or_email: string,
+    email_or_username: string,
     password: string
 }

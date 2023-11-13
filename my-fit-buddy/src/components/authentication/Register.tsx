@@ -61,7 +61,6 @@ const Register: React.FC = () => {
               errorMessage={errors.username}
               inputSize="full"
               inputStyle="regular"
-              fontSizePx="13"
             />
             <Input
               labelText="Email"
@@ -75,7 +74,6 @@ const Register: React.FC = () => {
               inputSize="full"
               errorMessage={errors.email}
               inputStyle="regular"
-              fontSizePx="13"
             />
 
             <Input
@@ -90,7 +88,6 @@ const Register: React.FC = () => {
               inputSize="full"
               errorMessage={errors.password}
               inputStyle="regular"
-              fontSizePx="13"
             />
 
             <Input
@@ -105,7 +102,6 @@ const Register: React.FC = () => {
               inputSize="full"
               errorMessage={errors.confirm_password}
               inputStyle="regular"
-              fontSizePx="13"
             />
           </div>
           <Button

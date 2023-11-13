@@ -5,7 +5,7 @@ interface InputProps {
   labelName: string;
   inputType: string;
   inputStyle: "transparent" | "regular";
-  fontSizePx: string;
+  fontSizePx?: string;
   placeholder: string;
   value: string;
   isRequired: boolean;
@@ -32,7 +32,7 @@ const Input: React.FC<InputProps> = ({
   labelName,
   inputType,
   inputStyle = 'regular',
-  fontSizePx,
+  fontSizePx = '18px',
   placeholder,
   value,
   isRequired,
