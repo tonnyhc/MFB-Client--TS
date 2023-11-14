@@ -1,18 +1,10 @@
 import { ReactNode } from "react";
 import { createContext } from "react";
 import useLocalStorage from "../hooks/useLocalStorage";
+import { AuthContextType, AuthData } from "../ts/types";
 
-type AuthData = {
-  token?: string;
-  username?: string;
-};
 
-type AuthContextType = {
-  authData: AuthData;
-  isAuth: boolean;
-  userLogin: (authData: AuthData) => void;
-  userLogout: () => void;
-};
+
 
 type AuthProviderProps = {
   children: ReactNode;

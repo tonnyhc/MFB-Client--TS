@@ -1,0 +1,25 @@
+import { RefObject, useEffect } from "react";
+
+const useClickOutside = (ref: RefObject<HTMLElement>, callback: () => void) => {
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        event.target &&
+        (event.target as HTMLElement).id === "openMoreNavigation"
+      ) {
+        return;
+      }
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        callback();
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [ref, callback]);
+};
+
+export default useClickOutside;

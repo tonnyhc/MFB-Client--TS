@@ -4,23 +4,14 @@ import { createContext } from "react";
 import { userProfileRequest } from "../services/profileServices";
 import { useContext } from "react";
 import { AuthContext } from "./AuthContext";
+import { AuthContextType, ProfileContextType, ProfileData } from "../ts/types";
 
-type ProfileData = {
-    id: string,
-    full_name: string,
-    gender: string,
-    user: string
-}
-
-type ProfileContext = {
-    profileData: ProfileData
-}
 
 interface ProfileProviderProps {
     children: ReactNode
 }
 
-export const ProfileContext = createContext<ProfileContext>({} as ProfileContext);
+export const ProfileContext = createContext<ProfileContextType>({} as ProfileContextType);
 
 const defaultProfileData: ProfileData = {
   id: "",
@@ -29,12 +20,12 @@ const defaultProfileData: ProfileData = {
   user: "",
 };
 
-const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) => { 
+export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) => { 
   const [profileData, setProfileData] = useState<ProfileData>(defaultProfileData);
-  const {isAuth} = useContext(AuthContext);
-
+  const {isAuth} = useContext<AuthContextType>(AuthContext);
+    
   useEffect(() => {
-    async function fetchProfileData() {
+    async function fetchProfileData():Promise<any> {
       try {
         const data = await userProfileRequest();
         setProfileData(data);
@@ -45,6 +36,7 @@ const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) => {
     };
     if (isAuth){
       fetchProfileData();
+      return
     }
 
   }, [isAuth]);
