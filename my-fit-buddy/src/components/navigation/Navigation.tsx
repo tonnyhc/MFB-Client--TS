@@ -9,11 +9,13 @@ import { useContext } from "react";
 import MoreSideNav from "./MoreSideNav";
 import { ProfileContextType } from "../../ts/types";
 import { ProfileContext } from "../../contexts/ProfileContext";
+import NavigationPill from "./NavigationPill";
 
 type NavItem = {
   path: string;
   activeIcon: ReactNode;
   icon: ReactNode;
+  text: string
 };
 
 const navItems: NavItem[] = [
@@ -21,11 +23,13 @@ const navItems: NavItem[] = [
     path: "/",
     activeIcon: <GoHomeFill className="fill-white" />,
     icon: <GoHome className="text-nav-pills-collor" />,
+    text: 'Home'
   },
   {
     path: "/workouts",
     activeIcon: <PiBarbellFill className="fill-white" />,
     icon: <PiBarbell className="text-nav-pills-collor" />,
+    text: "Workouts"
   },
 ];
 
@@ -34,8 +38,6 @@ interface NavigationProps {
 }
 
 const Navigation: React.FC<NavigationProps> = ({ children }) => {
-  const location = useLocation();
-  const isActiveLink = (path: string) => location.pathname === path;
   const [isMoreClicked, setIsMoreClicked] = useState(false);
   const { profileData } = useContext<ProfileContextType>(ProfileContext);
 
@@ -83,19 +85,18 @@ const Navigation: React.FC<NavigationProps> = ({ children }) => {
       {children}
 
       <ul
-        className="flex flex-row justify-between fixed z-10 w-full bottom-0 px-2 text-4xl h-12 items-center bg-nav-bg-dark"
+        className="flex flex-row justify-between fixed z-10 w-full bottom-0 px-2 text-4xl h-14 items-center bg-nav-bg-dark"
         role="list"
       >
         {navItems.map((item, index) => (
-          <li key={index}>
-            <NavLink
-              className="text-nav-pils-color"
-              onClick={closeSideNav}
-              to={item.path}
-            >
-              {isActiveLink(item.path) ? item.activeIcon : item.icon}
-            </NavLink>
-          </li>
+          <NavigationPill
+            key={index}
+            onClick={closeSideNav}
+            pathTo={item.path}
+            activeIcon={item.activeIcon}
+            icon={item.icon}
+            text={item.text}
+          />
         ))}
       </ul>
     </>
