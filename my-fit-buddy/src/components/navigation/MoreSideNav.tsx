@@ -1,51 +1,35 @@
-import { Link } from "react-router-dom";
-
+import {ReactNode, useContext} from 'react';
 import { AiOutlinePlus } from "react-icons/ai";
 import { PiBarbellDuotone } from "react-icons/pi";
 import { CiLogout } from "react-icons/ci";
 import styles from "./MoreSideNav.module.css";
-import { MouseEvent, ReactNode, forwardRef } from "react";
-import { useContext } from "react";
-// import { ProfileContext } from "../../contexts/ProfileContext";
+import { forwardRef } from "react";
+import { ProfileContext } from "../../contexts/ProfileContext";
+import SideNavPill from './SideNavPill';
 
-interface SideNavItem {
-    icon: ReactNode;
-    text: string;
-    path: string;
-    onClick: (e: MouseEvent<HTMLLIElement>) => void;
-  }
-  
-  const SideNavItem: React.FC<SideNavItem> = ({ icon, text, path, onClick }) => {
-    return (
-      <li onClick={onClick} className="mb-2">
-        <Link
-          to={path}
-          className="flex items-center gap-2 font text-lg tracking-wider"
-        >
-          <p className="text-red-500 text-[22px]">{icon}</p>
-          <p>{text}</p>
-        </Link>
-      </li>
-    );
-  };
+type NavItem = {
+  icon: ReactNode,
+  text: string,
+  path: string
+}
+
+const navItems: NavItem[] = [
+  {
+    icon: <PiBarbellDuotone />,
+    text: "Your Program",
+    path: "program/current",
+  },
+  {
+    icon: <AiOutlinePlus />,
+    text: "Create Custom Program",
+    path: "program/create",
+  },
+  { icon: <CiLogout />, text: "Logout", path: "/logout" },
+];
 
 const MoreSideNav = forwardRef<HTMLDivElement, {closeNav: () => void}>(function MoreSideNav(props, ref) {
   const { closeNav } = { ...props };
-  const navItems = [
-    {
-      icon: <PiBarbellDuotone />,
-      text: "Your Program",
-      path: "program/current",
-    },
-    {
-      icon: <AiOutlinePlus />,
-      text: "Create Custom Program",
-      path: "program/create",
-    },
-    { icon: <CiLogout />, text: "Logout", path: "/logout" },
-  ];
-
-//   const {profileData} = useContext(ProfileContext)
+  const {profileData} = useContext(ProfileContext)
 
   return (
     <div
@@ -62,13 +46,13 @@ const MoreSideNav = forwardRef<HTMLDivElement, {closeNav: () => void}>(function 
             />
           </div>
           <div>
-            {/* <p>{profileData.full_name}</p> */}
+            <p>{profileData.full_name}</p>
           </div>
         </div>
 
         <ul className="mt-5">
           {navItems.map((item, index) => (
-            <SideNavItem
+            <SideNavPill
               key={index}
               onClick={closeNav}
               icon={item.icon}
