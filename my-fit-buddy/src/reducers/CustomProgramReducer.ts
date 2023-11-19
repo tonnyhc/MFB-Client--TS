@@ -1,3 +1,5 @@
+import { ExerciseSet } from "../ts/types";
+
 // Function to update an array element at a specific index
 function updateArrayElement<T>(
   array: T[],
@@ -26,8 +28,7 @@ type ActionHandlers = {
   [key: string]: (state: ProgramState, action: Action) => ProgramState;
 };
 
-type Set = { weight: string; reps: string; minReps: string; maxReps: string };
-type Exercise = { name: string; sets: Set[] };
+type Exercise = { name: string; sets: ExerciseSet[] };
 type Workout = { workoutName: string; exercises: Exercise[] };
 export type ProgramState = {
   planName: string;
@@ -35,8 +36,19 @@ export type ProgramState = {
   numberOfWorkouts: number;
 };
 
-type Action = {
-  type: string;
+export type Action = {
+  type:
+    | "initializeProgram"
+    | "changeWorkoutName"
+    | "addExerciseToWorkout"
+    | "removeExerciseFromWorkout"
+    | "changeExerciseName"
+    | "selectExercise"
+    | "addSetToExercise"
+    | "removeSetFromExercise"
+    | "changeSetWeight"
+    | "changeSetReps"
+    | "default";
   payload?: any;
 };
 
@@ -44,6 +56,7 @@ const actionHandlers: ActionHandlers = {
   initializeProgram: handleInitializeProgram,
   changeWorkoutName: handleChangeWorkoutName,
   addExerciseToWorkout: handleAddExerciseToWorkout,
+  removeExerciseFromWorkout: handleRemoveExerciseFromWorkout,
   changeExerciseName: handleChangeExerciseName,
   selectExercise: handleSelectExercise,
   addSetToExercise: handleAddSetToExercise,
@@ -74,7 +87,6 @@ function handleInitializeProgram(
     })),
     numberOfWorkouts: Number(payload.numberOfWorkouts),
   };
-  console.log(newWorkoutPlanState);
   return newWorkoutPlanState;
 }
 
@@ -104,10 +116,11 @@ function handleAddExerciseToWorkout(
     sets: [{ weight: "", reps: "", minReps: "", maxReps: "" }],
   };
   const workoutIndexToAddExercise = action.payload;
-  const updateWorkoutExercisesArray = (workout: Workout) => ({
-    ...workout,
-    exercises: [...workout.exercises, newExercise],
-  });
+  const updateWorkoutExercisesArray = (workout: Workout): Workout =>
+    ({
+      ...workout,
+      exercises: [...workout.exercises, newExercise],
+    } as Workout);
 
   return {
     ...state,
@@ -115,6 +128,32 @@ function handleAddExerciseToWorkout(
       state.workouts,
       workoutIndexToAddExercise,
       updateWorkoutExercisesArray
+    ),
+  };
+}
+
+function handleRemoveExerciseFromWorkout(
+  state: ProgramState,
+  action: Action
+): ProgramState {
+  const workoutIndex = action.payload.workoutIndex;
+  const exerciseIndex = action.payload.exerciseIndex;
+
+  const removeExerciseFromArray = (exercises: Exercise[]) => {
+    const updatedExercises = [...exercises];
+    updatedExercises.splice(Number(exerciseIndex), 1);
+    return updatedExercises;
+  };
+
+  return {
+    ...state,
+    workouts: updateWorkoutExercises(
+      state.workouts,
+      workoutIndex,
+      (workout) => ({
+        ...workout,
+        exercises: removeExerciseFromArray(workout.exercises),
+      })
     ),
   };
 }
@@ -185,10 +224,11 @@ function handleAddSetToExercise(
   const workoutIndexToAddSet = action.payload.workoutIndex;
   const exerciseIndex = action.payload.exerciseIndex;
 
-  const updateExerciseSetsArray = (exercise: Exercise) => ({
-    ...exercise,
-    sets: [...exercise.sets, newSet],
-  });
+  const updateExerciseSetsArray = (exercise: Exercise): Exercise =>
+    ({
+      ...exercise,
+      sets: [...exercise.sets, newSet],
+    } as Exercise);
 
   return {
     ...state,
@@ -211,13 +251,13 @@ function handleRemoveSetFromExercise(
   state: ProgramState,
   action: Action
 ): ProgramState {
-  const workoutIndexToRemoveSet = action.payload.workoutIndex;
-  const exerciseIndexToRemoveSet = action.payload.exerciseIndex;
-  const setIndexToRemoveSet = action.payload.setIndex;
+  const workoutIndex = action.payload.workoutIndex;
+  const exerciseIndex = action.payload.exerciseIndex;
+  const setIndex = action.payload.setIndex;
 
   const removeSetFromExerciseArray = (exercise: Exercise) => {
     const updatedSets = [...exercise.sets];
-    updatedSets.splice(setIndexToRemoveSet, 1);
+    updatedSets.splice(setIndex, 1);
     return { ...exercise, sets: updatedSets };
   };
 
@@ -225,12 +265,12 @@ function handleRemoveSetFromExercise(
     ...state,
     workouts: updateWorkoutExercises(
       state.workouts,
-      workoutIndexToRemoveSet,
+      workoutIndex,
       (workout) => ({
         ...workout,
         exercises: updateArrayElement(
           workout.exercises,
-          exerciseIndexToRemoveSet,
+          exerciseIndex,
           removeSetFromExerciseArray
         ),
       })

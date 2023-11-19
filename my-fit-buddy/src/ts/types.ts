@@ -51,3 +51,11 @@ export type ProfileData = {
 export type ProfileContextType = {
   profileData: ProfileData;
 };
+
+// Exercises
+export type ExerciseSet = {
+  weight: number;
+  reps: number;
+  minReps: number;
+  maxReps: number;
+};

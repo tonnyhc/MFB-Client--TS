@@ -21,7 +21,7 @@ const WorkoutsCreationForm: React.FC = () => {
   return (
     <div className="w-full h-full relative">
       <div
-        className="flex absolute h-full overflow-y-scroll max-h-9/10"
+        className="flex absolute h-full max-h-9/10"
         style={{
           transform: `translateX(-${screenWidth * currentWorkoutIndex}px)`,
           transition:

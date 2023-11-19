@@ -32,7 +32,7 @@ const WorkoutCreationCard: React.FC<WorkoutCreationCardProps> = ({ workout, arra
   };
 
   return (
-    <article className="w-screen py-4 gap-3 flex flex-col justify-start items-center " key={`workout-${arrayIndex + 1}`}>
+    <article className="w-screen py-4 gap-3 flex flex-col overflow-y-scroll justify-start items-center " key={`workout-${arrayIndex + 1}`}>
       <div className="min-h-[50px]">
         <Input
           inputName={`workout${arrayIndex + 1}`}

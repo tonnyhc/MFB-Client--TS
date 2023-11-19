@@ -3,6 +3,7 @@ import React, {
   useEffect,
   useState,
   useDeferredValue,
+  MouseEventHandler,
 } from "react";
 
 import { HiPlusCircle } from "react-icons/hi2";
@@ -11,6 +12,8 @@ import { FaTrash } from "react-icons/fa";
 import Button from "../../common/button/Button";
 import Input from "../../common/input/Input";
 import { CreateCustomWorkoutPlanContext } from "../../../contexts/CreateCustomWorkoutContext";
+import { ExerciseSet } from "../../../ts/types";
+import ExerciseCreationSet from "./ExerciseCreationSet";
 // import CommicBubble from "../common/comic-bubble/ComicBubble";
 // import { useQuery } from "react-query";
 // import { exerciseSearch } from "../../services/exerciseServices";
@@ -39,26 +42,19 @@ const exercisesSearchResult = [
   },
 ];
 
-type Set = {
-    weight: number,
-    reps: number,
-    min_reps: number,
-    max_reps: number
-}
-
 type Exercise = {
   id: string;
   name: string;
   information: string;
   cover_photo: string;
-  sets :Set[]
+  sets: ExerciseSet[];
 };
 
 interface ExerciseCreationCardProps {
   exercise: Exercise;
-  exerciseIndex: number | number,
-  workoutIndex: number | number,
-  isOpened: boolean,
+  exerciseIndex: number | number;
+  workoutIndex: number | number;
+  isOpened: boolean;
   openCardClick: () => void;
 }
 
@@ -108,14 +104,14 @@ const ExerciseCreationCard: React.FC<ExerciseCreationCardProps> = ({
   const defferedExerciseNameSearch = useDeferredValue(exerciseNameSearch);
   const sets = exercise.sets;
 
-//   const { data, error, isLoading, refetch } = useQuery(
-//     ["exercise", defferedExerciseNameSearch],
-//     () => exerciseSearch(defferedExerciseNameSearch)
-//   );
+  //   const { data, error, isLoading, refetch } = useQuery(
+  //     ["exercise", defferedExerciseNameSearch],
+  //     () => exerciseSearch(defferedExerciseNameSearch)
+  //   );
 
-//   useEffect(() => {
-//     refetch();
-//   }, [defferedExerciseNameSearch]);
+  //   useEffect(() => {
+  //     refetch();
+  //   }, [defferedExerciseNameSearch]);
 
   // if (isLoading) {
   //   console.log("is loading...");
@@ -125,26 +121,31 @@ const ExerciseCreationCard: React.FC<ExerciseCreationCardProps> = ({
   //   // alert(error);
   // }
 
-//   function onSelectExercise(e, selectedExercise) {
-//     dispatch({
-//       type: "selectExercise",
-//       payload: {
-//         selectedExercise: selectedExercise,
-//         workoutIndex: workoutIndex,
-//         exerciseIndex: exerciseIndex,
-//       },
-//     });
-//     setExerciseNameSearch("");
-//   }
+  //   function onSelectExercise(e, selectedExercise) {
+  //     dispatch({
+  //       type: "selectExercise",
+  //       payload: {
+  //         selectedExercise: selectedExercise,
+  //         workoutIndex: workoutIndex,
+  //         exerciseIndex: exerciseIndex,
+  //       },
+  //     });
+  //     setExerciseNameSearch("");
+  //   }
   function addSet() {
     dispatch({
       type: "addSetToExercise",
       payload: { workoutIndex: workoutIndex, exerciseIndex: exerciseIndex },
     });
   }
-  // function removeSet(e, index) {
-  //   setSets((oldSets) => oldSets.filter((_, i) => i !== index));
-  // }
+
+  function deleteExercise(): void {
+    console.log('detele exercise')
+    dispatch({
+      type: "removeExerciseFromWorkout",
+      payload: { workoutIndex: workoutIndex, exerciseIndex: exerciseIndex },
+    });
+  }
 
   const openedCardClassNames = isOpened ? "bg-light-grey" : "bg-transparent";
 
@@ -170,6 +171,7 @@ const ExerciseCreationCard: React.FC<ExerciseCreationCardProps> = ({
           </div>
           <p>
             <Button
+              onClick={deleteExercise}
               color="transparent"
               icon={<FaTrash className="bg-red" />}
               type="delete"
@@ -184,15 +186,15 @@ const ExerciseCreationCard: React.FC<ExerciseCreationCardProps> = ({
       </div>
       {isOpened && (
         <>
-          {/* {sets.map((set, index) => (
-            <ExerciseSet
+          {sets.map((set, index) => (
+            <ExerciseCreationSet
               key={index}
               set={set}
               setIndex={index}
               exerciseIndex={exerciseIndex}
               workoutIndex={workoutIndex}
             />
-          ))} */}
+          ))}
           <Button
             text="Add Set"
             color="transparent"
