@@ -7,6 +7,7 @@ import Login from "./components/authentication/Login";
 import Logout from "./components/authentication/Logout";
 import { AuthContext } from "./contexts/AuthContext";
 import Navigation from "./components/navigation/Navigation";
+import CreateCustomWorkoutPlanProvider from "./contexts/CreateCustomWorkoutContext";
 
 type RouteType = {
   path: string;
@@ -37,7 +38,7 @@ function App() {
     return (
       <Navigation>
         <div className="h-[calc(100%-98px-50px)] mt-[54px] relative overflow-hidden ">
-          {/* <CreateCustomWorkoutPlanProvider> */}
+          <CreateCustomWorkoutPlanProvider>
           <Routes>
             {routesForAuthUser.map((route, index) => (
               <Route
@@ -47,7 +48,7 @@ function App() {
               />
             ))}
           </Routes>
-          {/* </CreateCustomWorkoutPlanProvider> */}
+          </CreateCustomWorkoutPlanProvider>
         </div>
       </Navigation>
     );
