@@ -68,11 +68,11 @@ function handleInitializeProgram(
   const payload = action.payload;
   const newWorkoutPlanState: ProgramState = {
     planName: payload.planName,
-    workouts: Array.from({ length: Number(payload.workoutsCount) }, () => ({
+    workouts: Array.from({ length: Number(payload.numberOfWorkouts) }, () => ({
       workoutName: "",
       exercises: [],
     })),
-    numberOfWorkouts: Number(payload.workoutsCount),
+    numberOfWorkouts: Number(payload.numberOfWorkouts),
   };
   console.log(newWorkoutPlanState);
   return newWorkoutPlanState;

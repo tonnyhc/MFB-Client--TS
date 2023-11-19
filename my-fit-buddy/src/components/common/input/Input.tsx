@@ -2,16 +2,16 @@ import { ChangeEvent, FocusEvent, ReactNode, useState } from "react";
 
 interface InputProps {
   inputName: string;
-  inputType: "password" | "email" | "text";
+  inputType: "password" | "email" | "text" | "number";
   inputStyle: "transparent" | "regular";
   fontSizePx?: string;
   placeholder: string;
-  value: string;
+  value: string | number;
   isRequired: boolean;
   inputSize: "xs" | "s" | "xxl" | "full";
   errorMessage?: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  onBlur: (e: FocusEvent<HTMLInputElement>) => string | null;
+  onBlur?: (e: FocusEvent<HTMLInputElement>) => string | null;
   leftIcon?: ReactNode,
   rightIcon?: ReactNode,
 }

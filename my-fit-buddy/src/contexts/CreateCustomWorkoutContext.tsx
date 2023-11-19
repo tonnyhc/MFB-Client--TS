@@ -6,7 +6,14 @@ interface CreateCustomWorkoutPlanContextProps {
   dispatch: Dispatch<any>; // Replace 'any' with your specific action types if available
 }
 
-export const CreateCustomWorkoutPlanContext = createContext<CreateCustomWorkoutPlanContextProps | undefined>(undefined);
+export const CreateCustomWorkoutPlanContext = createContext<CreateCustomWorkoutPlanContextProps>({
+  workoutPlan: {
+    planName: "",
+    workouts: [],
+    numberOfWorkouts: 0,
+  },
+  dispatch: () => {}, // Provide a default function or replace with your specific action types
+});
 
 interface CreateCustomWorkoutPlanProviderProps {
   children: ReactNode;

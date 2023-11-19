@@ -20,7 +20,7 @@ function getButtonClassNamesFromColor(color: string):string {
 }
 
 interface ButtonProps {
-  text: string;
+  text?: string;
   color: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   id?: string;

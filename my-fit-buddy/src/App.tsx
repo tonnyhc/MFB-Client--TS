@@ -8,13 +8,17 @@ import Logout from "./components/authentication/Logout";
 import { AuthContext } from "./contexts/AuthContext";
 import Navigation from "./components/navigation/Navigation";
 import CreateCustomWorkoutPlanProvider from "./contexts/CreateCustomWorkoutContext";
+import CustomProgramCreate from "./pages/CustomProgramCreate";
 
 type RouteType = {
   path: string;
   element: React.FC;
 };
 
-const routesForAuthUser: RouteType[] = [{ path: "/logout", element: Logout }];
+const routesForAuthUser: RouteType[] = [
+  { path: "/logout", element: Logout },
+  { path: "/program/create", element: CustomProgramCreate },
+];
 
 const routesForUnAuthUser: RouteType[] = [
   { path: "/register", element: Register },
@@ -39,15 +43,15 @@ function App() {
       <Navigation>
         <div className="h-[calc(100%-98px-50px)] mt-[54px] relative overflow-hidden ">
           <CreateCustomWorkoutPlanProvider>
-          <Routes>
-            {routesForAuthUser.map((route, index) => (
-              <Route
-                path={route.path}
-                element={<route.element />}
-                key={index}
-              />
-            ))}
-          </Routes>
+            <Routes>
+              {routesForAuthUser.map((route, index) => (
+                <Route
+                  path={route.path}
+                  element={<route.element />}
+                  key={index}
+                />
+              ))}
+            </Routes>
           </CreateCustomWorkoutPlanProvider>
         </div>
       </Navigation>
