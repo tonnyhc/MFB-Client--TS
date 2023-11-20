@@ -1,4 +1,5 @@
 import { MouseEventHandler, ReactNode } from "react";
+import LoadingSpinner from "../loading-spinner/LoadingSpinner";
 
 const buttonClassNamesFromShape = {
   rectangular: "py-2.5 px-4 rounded-lg",
@@ -15,7 +16,7 @@ const buttonClassNamesFromWidth = {
   unset: "unset",
 };
 
-function getButtonClassNamesFromColor(color: string):string {
+function getButtonClassNamesFromColor(color: string): string {
   return `bg-button-${color}`;
 }
 
@@ -30,6 +31,7 @@ interface ButtonProps {
   type: "delete" | "default";
   width: "full" | "unset";
   disabled?: boolean;
+  isLoading?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -43,6 +45,7 @@ const Button: React.FC<ButtonProps> = ({
   type,
   width,
   disabled,
+  isLoading,
 }) => {
   const shapeClassNames = buttonClassNamesFromShape[shape];
   const typeClassNames = buttonClassNamesFromType[type];
@@ -53,20 +56,23 @@ const Button: React.FC<ButtonProps> = ({
     ? ""
     : "transform transition-transform duration-100 hover:scale-110";
 
+
   return (
     <button
       id={id}
       disabled={disabled ? true : false}
       onClick={onClick}
-      className={`flex justify-center items-center ${hoverClassNames} ${colorClassNames} ${disabledClassNames} ${shapeClassNames} ${typeClassNames} ${widthClassNames}`}
+      className={`flex justify-center gap-1 items-center ${hoverClassNames} ${colorClassNames} ${disabledClassNames} ${shapeClassNames} ${typeClassNames} ${widthClassNames}`}
     >
       {reverseOrder ? (
         <>
+          {isLoading && <div><LoadingSpinner /></div>}
           {icon && <p>{icon}</p>}
           <p>{text}</p>
         </>
       ) : (
         <>
+          {isLoading && <div><LoadingSpinner /></div>}
           <p>{text}</p>
           {icon && <p>{icon}</p>}
         </>

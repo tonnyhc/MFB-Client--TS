@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
+import { useMutation } from "react-query";
 
-import {BsFillPersonFill} from 'react-icons/bs'
+import { BsFillPersonFill } from "react-icons/bs";
 
 import Button from "../common/button/Button";
 import Input from "../common/input/Input";
@@ -24,16 +25,19 @@ const Login = () => {
   const [requestErrors, setRequestErrors] = useState("");
   const { userLogin } = useContext(AuthContext);
 
-  async function onSubmitLogin(e: SyntheticEvent): Promise<any> {
-    e.preventDefault();
-    try {
-      const data = await loginRequest(formData as LoginBody);
-      setRequestErrors("");
-      userLogin(data);
-      return data;
-    } catch (error: any) {
-      setRequestErrors(error);
+  const { mutate, isLoading, isError, error } = useMutation(
+    () => loginRequest(formData as LoginBody),
+    {
+      onSuccess: (data) => userLogin(data),
+      onError: (error) => {
+        alert(error);
+      },
     }
+  );
+
+  async function onSubmitLogin(e: SyntheticEvent) {
+    e.preventDefault();
+    mutate();
   }
 
   return (
@@ -55,7 +59,11 @@ const Login = () => {
               inputStyle={"transparent"}
               leftIcon={<BsFillPersonFill />}
             />
-            <PasswordInput value={formData.password} onChange={handleChange} onBlur={handleBlurValidation}/>
+            <PasswordInput
+              value={formData.password}
+              onChange={handleChange}
+              onBlur={handleBlurValidation}
+            />
           </div>
           <Button
             text="Login"
@@ -63,6 +71,7 @@ const Login = () => {
             width="full"
             shape="rectangular"
             type={"default"} // disabled={Object.values(errors).some((error) => !!error)}
+            isLoading={isLoading}
           />
         </form>
 

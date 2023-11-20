@@ -9,6 +9,7 @@ import { AuthContext } from "./contexts/AuthContext";
 import Navigation from "./components/navigation/Navigation";
 import CreateCustomWorkoutPlanProvider from "./contexts/CreateCustomWorkoutContext";
 import CustomProgramCreate from "./pages/CustomProgramCreate";
+import LoadingSpinner from "./components/common/loading-spinner/LoadingSpinner";
 
 type RouteType = {
   path: string;
@@ -27,7 +28,6 @@ const routesForUnAuthUser: RouteType[] = [
 
 function App() {
   const { isAuth } = useContext(AuthContext);
-
   function render() {
     if (!isAuth) {
       return (

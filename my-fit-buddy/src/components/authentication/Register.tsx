@@ -11,6 +11,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import Button from "../common/button/Button";
 import { Link } from "react-router-dom";
 import PasswordInput from "../common/input/PasswordInput";
+import { useMutation } from "react-query";
 
 const initialState: RegisterFormState = {
   username: "",
@@ -24,23 +25,26 @@ const Register: React.FC = () => {
   const [formData, errors, handleChange, handleBlurValidation] =
     useFormState(initialState);
 
+  const { mutate, isLoading } = useMutation(
+    async () => {
+      const formDataCopy: RegisterBody = {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+      };
+      return registerRequest(formDataCopy);
+    },
+    {
+      onSuccess: (data) => userLogin(data),
+      onError: (error) => {
+        alert(error);
+      },
+    }
+  );
+
   async function onSubmitRegister(e: SyntheticEvent): Promise<any> {
     e.preventDefault();
-    const formDataCopy: RegisterBody = {
-      username: formData.username,
-      email: formData.email,
-      password: formData.password,
-    };
-    try {
-      const data = await registerRequest(formDataCopy);
-      userLogin(data);
-      return data;
-    } catch (error: any) {
-      if (error instanceof Error) {
-        alert(error.message);
-        console.log(error);
-      }
-    }
+    mutate();
   }
 
   return (
@@ -100,6 +104,7 @@ const Register: React.FC = () => {
             shape="rectangular"
             disabled={Object.values(errors).some((error) => !!error)}
             type="default"
+            isLoading={isLoading}
           />
         </form>
 
