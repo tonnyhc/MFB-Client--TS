@@ -68,7 +68,7 @@ const CustomProgramCreate: React.FC = () => {
           icon={<MdOutlineNavigateNext style={{ color: "#fff" }} />}
           id="next"
           color="red"
-          text="Next"
+          text={currStep >= 1 ? "Submit" : "Next"}
           shape="rectangular"
           type="default"
           width="unset"

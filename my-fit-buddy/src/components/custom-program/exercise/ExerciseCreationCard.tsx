@@ -1,9 +1,8 @@
 import React, {
   useContext,
-  useEffect,
   useState,
   useDeferredValue,
-  MouseEventHandler,
+  useEffect,
 } from "react";
 
 import { HiPlusCircle } from "react-icons/hi2";
@@ -12,38 +11,14 @@ import { FaTrash } from "react-icons/fa";
 import Button from "../../common/button/Button";
 import Input from "../../common/input/Input";
 import { CreateCustomWorkoutPlanContext } from "../../../contexts/CreateCustomWorkoutContext";
-import { ExerciseSet } from "../../../ts/types";
+import { ExerciseSearch, ExerciseSet } from "../../../ts/types";
 import ExerciseCreationSet from "./ExerciseCreationSet";
-// import CommicBubble from "../common/comic-bubble/ComicBubble";
-// import { useQuery } from "react-query";
-// import { exerciseSearch } from "../../services/exerciseServices";
-// import ExerciseSet from "./ExerciseSet";
-
-const exercisesSearchResult = [
-  {
-    id: 2,
-    name: "Barbell Bench Press",
-    cover_photo:
-      "https://static.strengthlevel.com/images/illustrations/bench-press-1000x1000.jpg",
-    information:
-      "Primary worked muscles here are the chest, front delt and the triceps",
-    video_tutorial: "https://www.youtube.com/shorts/EdDqD4aKwxM",
-    tips: "Be carefull with the shoulders!",
-  },
-  {
-    id: 3,
-    name: "Pull Ups",
-    cover_photo:
-      "https://static.strengthlevel.com/images/illustrations/pull-ups-1000x1000.jpg",
-    information:
-      "Primary worked muscles here are the chest, front delt and the triceps",
-    video_tutorial: "https://www.youtube.com/shorts/EdDqD4aKwxM",
-    tips: "Be carefull with the shoulders!",
-  },
-];
+import { useQuery } from "react-query";
+import { exerciseSearch } from "../../../services/exerciseServices";
+import ExerciseSearchPopUp from "./ExerciseSearchPopUp";
 
 type Exercise = {
-  id: string;
+  id: string | number;
   name: string;
   information: string;
   cover_photo: string;
@@ -52,45 +27,11 @@ type Exercise = {
 
 interface ExerciseCreationCardProps {
   exercise: Exercise;
-  exerciseIndex: number | number;
-  workoutIndex: number | number;
+  exerciseIndex: number;
+  workoutIndex: number;
   isOpened: boolean;
   openCardClick: () => void;
 }
-
-// const ExerciseSearchPopUp = ({ onSelectExercise }) => {
-//   return (
-//     <div className="absolute z-10 w-full h-10 text-white">
-//       <CommicBubble>
-//         <div className="flex justify-between items-center border-b-2 border-white text-sm">
-//           <p>Exercises</p>
-//           <p>Your Exercises</p>
-//         </div>
-//         <div>
-//           {exercisesSearchResult.map((exercise) => (
-//             <article
-//               key={exercise.id}
-//               onClick={(e) => onSelectExercise(e, exercise)}
-//               className="h-20 flex gap-2 cursor-pointer border-b-2 border-white px-1 py-2"
-//             >
-//               <div className="w-[40%] h-full">
-//                 <img
-//                   className="w-full h-full object-contain"
-//                   src={exercise.cover_photo}
-//                   alt=""
-//                 />
-//               </div>
-//               <div>
-//                 <p className="text-sm">{exercise.name}</p>
-//                 <p className="text-xs text-gray-400">{exercise.information}</p>
-//               </div>
-//             </article>
-//           ))}
-//         </div>
-//       </CommicBubble>
-//     </div>
-//   );
-// };
 
 const ExerciseCreationCard: React.FC<ExerciseCreationCardProps> = ({
   exercise,
@@ -104,14 +45,22 @@ const ExerciseCreationCard: React.FC<ExerciseCreationCardProps> = ({
   const defferedExerciseNameSearch = useDeferredValue(exerciseNameSearch);
   const sets = exercise.sets;
 
-  //   const { data, error, isLoading, refetch } = useQuery(
-  //     ["exercise", defferedExerciseNameSearch],
-  //     () => exerciseSearch(defferedExerciseNameSearch)
-  //   );
+  const { data, error, isLoading, refetch } = useQuery(
+    ["exercise", defferedExerciseNameSearch],
+    () => {
+      if (!defferedExerciseNameSearch) {
+        return;
+      }
+      return exerciseSearch(defferedExerciseNameSearch);
+    },
+    {
+      onError: (error) => alert(error),
+    }
+  );
 
-  //   useEffect(() => {
-  //     refetch();
-  //   }, [defferedExerciseNameSearch]);
+  useEffect(() => {
+    refetch();
+  }, [defferedExerciseNameSearch]);
 
   // if (isLoading) {
   //   console.log("is loading...");
@@ -121,17 +70,17 @@ const ExerciseCreationCard: React.FC<ExerciseCreationCardProps> = ({
   //   // alert(error);
   // }
 
-  //   function onSelectExercise(e, selectedExercise) {
-  //     dispatch({
-  //       type: "selectExercise",
-  //       payload: {
-  //         selectedExercise: selectedExercise,
-  //         workoutIndex: workoutIndex,
-  //         exerciseIndex: exerciseIndex,
-  //       },
-  //     });
-  //     setExerciseNameSearch("");
-  //   }
+  function onSelectExercise(selectedExercise: ExerciseSearch) {
+    dispatch({
+      type: "selectExercise",
+      payload: {
+        selectedExercise: selectedExercise,
+        workoutIndex: workoutIndex,
+        exerciseIndex: exerciseIndex,
+      },
+    });
+    setExerciseNameSearch("");
+  }
   function addSet() {
     dispatch({
       type: "addSetToExercise",
@@ -140,7 +89,6 @@ const ExerciseCreationCard: React.FC<ExerciseCreationCardProps> = ({
   }
 
   function deleteExercise(): void {
-    console.log('detele exercise')
     dispatch({
       type: "removeExerciseFromWorkout",
       payload: { workoutIndex: workoutIndex, exerciseIndex: exerciseIndex },
@@ -180,9 +128,13 @@ const ExerciseCreationCard: React.FC<ExerciseCreationCardProps> = ({
             />
           </p>
         </div>
-        {/* {exerciseNameSearch && (
-          <ExerciseSearchPopUp onSelectExercise={onSelectExercise} />
-        )} */}
+        {exerciseNameSearch && (
+          <ExerciseSearchPopUp
+            exercises={data?.exercises || []}
+            exercises_by_user={data?.exercises_by_user || []}
+            onSelectExercise={onSelectExercise}
+          />
+        )}
       </div>
       {isOpened && (
         <>

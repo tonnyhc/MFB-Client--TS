@@ -59,3 +59,17 @@ export type ExerciseSet = {
   minReps: number;
   maxReps: number;
 };
+
+export type ExerciseSearch = {
+  id: string | number;
+  name: string;
+  cover_photo: string;
+  information: string;
+  video_tutorial: string;
+  tips: string;
+  created_at: string;
+};
+export type ExerciseSearchResponse = {
+  exercises_by_user: ExerciseSearch[];
+  exercises: ExerciseSearch[];
+};
