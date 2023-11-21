@@ -13,24 +13,30 @@ import { useState } from "react";
 import { LoginBody } from "../../ts/types";
 import PasswordInput from "../common/input/PasswordInput";
 
+type LoginError = {
+  non_field_errors: string[];
+  password?: string;
+};
+
 const Login = () => {
   const initialState: LoginBody = {
     email_or_username: "",
     password: "",
   };
 
+  const [loginErrors, setLoginErrors] = useState("");
+
   const [formData, errors, handleChange, handleBlurValidation] =
     useFormState(initialState);
 
-  const [requestErrors, setRequestErrors] = useState("");
   const { userLogin } = useContext(AuthContext);
 
   const { mutate, isLoading, isError, error } = useMutation(
     () => loginRequest(formData as LoginBody),
     {
       onSuccess: (data) => userLogin(data),
-      onError: (error) => {
-        alert(error);
+      onError: (error: LoginError) => {
+        setLoginErrors(error.non_field_errors[0]);
       },
     }
   );
@@ -45,7 +51,7 @@ const Login = () => {
       <div className="m-auto w-[85%] h-full flex flex-col justify-center items-center gap-10 ">
         <form className="w-full" onSubmit={onSubmitLogin}>
           <div className="flex flex-col gap-3 items-center justify-center w-full mb-7">
-            <p className="text-red-400">{requestErrors}</p>
+            <p className="text-red-400">{loginErrors}</p>
             <Input
               placeholder="Email or Username"
               inputName="email_or_username"
@@ -71,6 +77,7 @@ const Login = () => {
             width="full"
             shape="rectangular"
             type={"default"} // disabled={Object.values(errors).some((error) => !!error)}
+            disabled={Object.values(formData).some((value) => !value)}
             isLoading={isLoading}
           />
         </form>

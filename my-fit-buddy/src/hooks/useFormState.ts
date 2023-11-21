@@ -86,9 +86,9 @@ const useFormState = (
       } as FieldType;
     });
 
-    if (name === "password") {
+    if (name === "confirm_password") {
       const confirmError =
-        fields.confirm_password !== value ? "Passwords don't match!" : "";
+        fields.password !== value ? "Passwords don't match!" : "";
       setErrors((oldErrors) => ({
         ...oldErrors,
         confirm_password: confirmError,

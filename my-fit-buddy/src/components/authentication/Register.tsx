@@ -1,4 +1,4 @@
-import { SyntheticEvent, useContext } from "react";
+import { SyntheticEvent, useContext, useState } from "react";
 
 import { IoIosMail } from "react-icons/io";
 import { BsFillPersonFill } from "react-icons/bs";
@@ -20,10 +20,13 @@ const initialState: RegisterFormState = {
   confirm_password: "",
 };
 
+type RegisterErrors = [email?: string[], username?: string[]];
+
 const Register: React.FC = () => {
   const { userLogin } = useContext(AuthContext);
   const [formData, errors, handleChange, handleBlurValidation] =
     useFormState(initialState);
+  const [registerErrors, setRegisterErrors] = useState<RegisterErrors>([]);
 
   const { mutate, isLoading } = useMutation(
     async () => {
@@ -36,8 +39,8 @@ const Register: React.FC = () => {
     },
     {
       onSuccess: (data) => userLogin(data),
-      onError: (error) => {
-        alert(error);
+      onError: (error: RegisterErrors) => {
+        setRegisterErrors(error);
       },
     }
   );
@@ -58,6 +61,12 @@ const Register: React.FC = () => {
       <div className="m-auto w-[85%] h-full flex flex-col justify-center items-center gap-10 ">
         <form className="w-full" onSubmit={onSubmitRegister}>
           <div className="flex flex-col gap-3 items-center justify-center w-full mb-7">
+            {Object.entries(registerErrors).map(([key, value]) => (
+              <p key={key} className="text-red-400 border-b-2 w-full border-cyan-700">
+                {value?.join(", ")}
+              </p>
+            ))}
+
             <Input
               placeholder="Username"
               inputName="username"
@@ -102,7 +111,7 @@ const Register: React.FC = () => {
             color="light-grey"
             width="full"
             shape="rectangular"
-            disabled={Object.values(errors).some((error) => !!error)}
+            disabled={Object.values(formData).some((value) => !value)}
             type="default"
             isLoading={isLoading}
           />
