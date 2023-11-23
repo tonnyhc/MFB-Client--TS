@@ -133,6 +133,7 @@ const ExerciseCreationCard: React.FC<ExerciseCreationCardProps> = ({
             exercises={data?.exercises || []}
             exercises_by_user={data?.exercises_by_user || []}
             onSelectExercise={onSelectExercise}
+            isLoadingSearch={isLoading}
           />
         )}
       </div>

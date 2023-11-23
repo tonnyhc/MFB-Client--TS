@@ -1,16 +1,19 @@
 import { ExerciseSearch } from "../../../ts/types";
 import CommicBubble from "../../common/commic-bubble/CommicBubble";
+import LoadingSpinner from "../../common/loading-spinner/LoadingSpinner";
 
 interface ExerciseSearchPopUpProps {
   onSelectExercise: (selectedExercise: ExerciseSearch) => void;
   exercises: ExerciseSearch[];
   exercises_by_user: ExerciseSearch[];
+  isLoadingSearch: boolean;
 }
 
 const ExerciseSearchPopUp: React.FC<ExerciseSearchPopUpProps> = ({
   onSelectExercise,
   exercises,
   exercises_by_user,
+  isLoadingSearch,
 }) => {
   return (
     <div className="absolute z-10 w-full h-10 text-white">
@@ -19,6 +22,11 @@ const ExerciseSearchPopUp: React.FC<ExerciseSearchPopUpProps> = ({
           <p>Exercises</p>
           <p>Your Exercises</p>
         </div>
+        {isLoadingSearch && (
+          <div className="w-full h-full">
+            <LoadingSpinner />
+          </div>
+        )}
         <div>
           {exercises_by_user.map((exercise) => (
             <article

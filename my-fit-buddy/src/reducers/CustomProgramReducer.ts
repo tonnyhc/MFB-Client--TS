@@ -24,6 +24,41 @@ function updateWorkoutExercises<T>(
   return updatedWorkouts;
 }
 
+function handleEditSetProperty(
+  state: ProgramState,
+  action: Action,
+  propertyName: string,
+  updateFn: (set: ExerciseSet, value: any) => ExerciseSet
+): ProgramState {
+  const propertyValue = action.payload[propertyName];
+  const workoutIndex = action.payload.workoutIndex;
+  const exerciseIndex = action.payload.exerciseIndex;
+  const setIndex = action.payload.setIndex;
+
+  const updateExerciseSetsArray = (exercise: Exercise) => ({
+    ...exercise,
+    sets: exercise.sets.map((set, index) =>
+      index === setIndex ? updateFn(set, propertyValue) : set
+    ),
+  });
+
+  return {
+    ...state,
+    workouts: updateWorkoutExercises(
+      state.workouts,
+      workoutIndex,
+      (workout) => ({
+        ...workout,
+        exercises: updateArrayElement(
+          workout.exercises,
+          exerciseIndex,
+          updateExerciseSetsArray
+        ),
+      })
+    ),
+  };
+}
+
 type ActionHandlers = {
   [key: string]: (state: ProgramState, action: Action) => ProgramState;
 };
@@ -48,6 +83,8 @@ export type Action = {
     | "removeSetFromExercise"
     | "changeSetWeight"
     | "changeSetReps"
+    | "changeSetMinReps"
+    | "changeSetMaxReps"
     | "default";
   payload?: any;
 };
@@ -63,6 +100,8 @@ const actionHandlers: ActionHandlers = {
   removeSetFromExercise: handleRemoveSetFromExercise,
   changeSetWeight: handleEditSetWeight,
   changeSetReps: handleEditSetReps,
+  changeSetMinReps: handleEditSetMinReps,
+  changeSetMaxReps: handleEditSetMaxReps,
   default: handleDefault,
 };
 
@@ -282,63 +321,38 @@ function handleEditSetWeight(
   state: ProgramState,
   action: Action
 ): ProgramState {
-  const weight = action.payload.weight;
-  const workoutIndex = action.payload.workoutIndex;
-  const exerciseIndex = action.payload.exerciseIndex;
-  const setIndex = action.payload.setIndex;
 
-  const updateExerciseSetsArray = (exercise: Exercise) => ({
-    ...exercise,
-    sets: exercise.sets.map((set, index) =>
-      index === setIndex ? { ...set, weight: weight } : set
-    ),
-  });
-
-  return {
-    ...state,
-    workouts: updateWorkoutExercises(
-      state.workouts,
-      workoutIndex,
-      (workout) => ({
-        ...workout,
-        exercises: updateArrayElement(
-          workout.exercises,
-          exerciseIndex,
-          updateExerciseSetsArray
-        ),
-      })
-    ),
-  };
+  return handleEditSetProperty(state, action, "weight", (set, weight) => ({
+    ...set,
+    weight,
+  }));
 }
 
 function handleEditSetReps(state: ProgramState, action: Action): ProgramState {
-  const reps = action.payload.reps;
-  const workoutIndex = action.payload.workoutIndex;
-  const exerciseIndex = action.payload.exerciseIndex;
-  const setIndex = action.payload.setIndex;
 
-  const updateExerciseSetsArray = (exercise: Exercise) => ({
-    ...exercise,
-    sets: exercise.sets.map((set, index) =>
-      index === setIndex ? { ...set, reps: reps } : set
-    ),
-  });
+  return handleEditSetProperty(state, action, "reps", (set, reps) => ({
+    ...set,
+    reps,
+  }));
+}
 
-  return {
-    ...state,
-    workouts: updateWorkoutExercises(
-      state.workouts,
-      workoutIndex,
-      (workout) => ({
-        ...workout,
-        exercises: updateArrayElement(
-          workout.exercises,
-          exerciseIndex,
-          updateExerciseSetsArray
-        ),
-      })
-    ),
-  };
+function handleEditSetMinReps(
+  state: ProgramState,
+  action: Action
+): ProgramState {
+  return handleEditSetProperty(state, action, "minReps", (set, minReps) => ({
+    ...set,
+    minReps,
+  }));
+}
+function handleEditSetMaxReps(
+  state: ProgramState,
+  action: Action
+): ProgramState {
+  return handleEditSetProperty(state, action, "maxReps", (set, maxReps) => ({
+    ...set,
+    maxReps,
+  }));
 }
 
 function handleDefault(state: ProgramState): ProgramState {

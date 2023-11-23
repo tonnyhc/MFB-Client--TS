@@ -40,7 +40,37 @@ const ExerciseCreationSet: React.FC<ExerciseCreationSetProps> = ({
     dispatch({
       type: "changeSetReps",
       payload: {
-        weight: value,
+        reps: value,
+        setIndex: setIndex,
+        workoutIndex: workoutIndex,
+        exerciseIndex: exerciseIndex,
+      },
+    });
+  }
+
+  function changeExerciseMinReps(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value;
+    dispatch({
+      type: "changeSetMinReps",
+      payload: {
+        minReps: value,
+        setIndex: setIndex,
+        workoutIndex: workoutIndex,
+        exerciseIndex: exerciseIndex,
+      },
+    });
+  }
+
+  function changeExerciseSetProperty(
+    actionType: string,
+    propertyName: string,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) {
+    const value = e.target.value;
+    dispatch({
+      type: actionType,
+      payload: {
+        [propertyName]: value,
         setIndex: setIndex,
         workoutIndex: workoutIndex,
         exerciseIndex: exerciseIndex,
@@ -77,7 +107,7 @@ const ExerciseCreationSet: React.FC<ExerciseCreationSetProps> = ({
           inputType="number"
           value={set.weight}
           inputSize="full"
-          onChange={changeExerciseSetWeight}
+          onChange={(e) => changeExerciseSetProperty('changeSetWeight', 'weight', e)}
           inputStyle="transparent"
           isRequired={true}
         />
@@ -88,7 +118,7 @@ const ExerciseCreationSet: React.FC<ExerciseCreationSetProps> = ({
           inputType="number"
           value={set.reps}
           inputSize="full"
-          onChange={changeExerciseSetReps}
+          onChange={(e) => changeExerciseSetProperty('changeSetReps', 'reps', e)}
           inputStyle="transparent"
           isRequired={true}
         />
@@ -98,7 +128,7 @@ const ExerciseCreationSet: React.FC<ExerciseCreationSetProps> = ({
           fontSizePx="12px"
           inputName="minReps"
           inputType="number"
-          onChange={(e) => console.log(e)}
+          onChange={(e) => changeExerciseSetProperty('changeSetMinReps', 'minReps', e)}
           value={set.minReps}
           inputSize="full"
           inputStyle="transparent"
@@ -111,7 +141,7 @@ const ExerciseCreationSet: React.FC<ExerciseCreationSetProps> = ({
           inputType="number"
           value={set.maxReps}
           inputSize="full"
-          onChange={(e) => console.log(e)}
+          onChange={(e) => changeExerciseSetProperty('changeSetMaxReps', 'maxReps', e)}
           inputStyle="transparent"
           isRequired={true}
         />
