@@ -22,45 +22,6 @@ const ExerciseCreationSet: React.FC<ExerciseCreationSetProps> = ({
 }) => {
   const { dispatch } = useContext(CreateCustomWorkoutPlanContext);
 
-  function changeExerciseSetWeight(e: React.ChangeEvent<HTMLInputElement>) {
-    const value = e.target.value;
-    dispatch({
-      type: "changeSetWeight",
-      payload: {
-        weight: value,
-        setIndex: setIndex,
-        workoutIndex: workoutIndex,
-        exerciseIndex: exerciseIndex,
-      },
-    });
-  }
-
-  function changeExerciseSetReps(e: React.ChangeEvent<HTMLInputElement>) {
-    const value = e.target.value;
-    dispatch({
-      type: "changeSetReps",
-      payload: {
-        reps: value,
-        setIndex: setIndex,
-        workoutIndex: workoutIndex,
-        exerciseIndex: exerciseIndex,
-      },
-    });
-  }
-
-  function changeExerciseMinReps(e: React.ChangeEvent<HTMLInputElement>) {
-    const value = e.target.value;
-    dispatch({
-      type: "changeSetMinReps",
-      payload: {
-        minReps: value,
-        setIndex: setIndex,
-        workoutIndex: workoutIndex,
-        exerciseIndex: exerciseIndex,
-      },
-    });
-  }
-
   function changeExerciseSetProperty(
     actionType: string,
     propertyName: string,

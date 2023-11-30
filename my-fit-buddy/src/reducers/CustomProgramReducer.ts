@@ -1,5 +1,35 @@
 import { ExerciseSet } from "../ts/types";
 
+type ActionHandlers = {
+  [key: string]: (state: ProgramState, action: Action) => ProgramState;
+};
+
+type Exercise = { name: string; sets: ExerciseSet[] };
+type Workout = { workoutName: string; exercises: Exercise[] };
+export type ProgramState = {
+  planName: string;
+  workouts: Workout[];
+  numberOfWorkouts: number;
+};
+
+export type Action = {
+  type:
+    | "initializeProgram"
+    | "changeWorkoutName"
+    | "addExerciseToWorkout"
+    | "removeExerciseFromWorkout"
+    | "changeExerciseName"
+    | "selectExercise"
+    | "addSetToExercise"
+    | "removeSetFromExercise"
+    | "changeSetWeight"
+    | "changeSetReps"
+    | "changeSetMinReps"
+    | "changeSetMaxReps"
+    | "default";
+  payload?: any;
+};
+
 // Function to update an array element at a specific index
 function updateArrayElement<T>(
   array: T[],
@@ -58,36 +88,6 @@ function handleEditSetProperty(
     ),
   };
 }
-
-type ActionHandlers = {
-  [key: string]: (state: ProgramState, action: Action) => ProgramState;
-};
-
-type Exercise = { name: string; sets: ExerciseSet[] };
-type Workout = { workoutName: string; exercises: Exercise[] };
-export type ProgramState = {
-  planName: string;
-  workouts: Workout[];
-  numberOfWorkouts: number;
-};
-
-export type Action = {
-  type:
-    | "initializeProgram"
-    | "changeWorkoutName"
-    | "addExerciseToWorkout"
-    | "removeExerciseFromWorkout"
-    | "changeExerciseName"
-    | "selectExercise"
-    | "addSetToExercise"
-    | "removeSetFromExercise"
-    | "changeSetWeight"
-    | "changeSetReps"
-    | "changeSetMinReps"
-    | "changeSetMaxReps"
-    | "default";
-  payload?: any;
-};
 
 const actionHandlers: ActionHandlers = {
   initializeProgram: handleInitializeProgram,
@@ -321,7 +321,6 @@ function handleEditSetWeight(
   state: ProgramState,
   action: Action
 ): ProgramState {
-
   return handleEditSetProperty(state, action, "weight", (set, weight) => ({
     ...set,
     weight,
@@ -329,7 +328,6 @@ function handleEditSetWeight(
 }
 
 function handleEditSetReps(state: ProgramState, action: Action): ProgramState {
-
   return handleEditSetProperty(state, action, "reps", (set, reps) => ({
     ...set,
     reps,

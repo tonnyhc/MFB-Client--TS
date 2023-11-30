@@ -18,11 +18,11 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <ProfileProvider>
-            <App />
-          </ProfileProvider>
-        </AuthProvider>
+          <AuthProvider>
+            <ProfileProvider>
+              <App />
+            </ProfileProvider>
+          </AuthProvider>
       </QueryClientProvider>
     </BrowserRouter>
   </React.StrictMode>

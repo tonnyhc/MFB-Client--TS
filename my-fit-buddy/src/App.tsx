@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext } from "react";
+import React, { useContext } from "react";
 
 import { Routes, Route } from "react-router-dom";
 
@@ -9,7 +9,8 @@ import { AuthContext } from "./contexts/AuthContext";
 import Navigation from "./components/navigation/Navigation";
 import CreateCustomWorkoutPlanProvider from "./contexts/CreateCustomWorkoutContext";
 import CustomProgramCreate from "./pages/CustomProgramCreate";
-import LoadingSpinner from "./components/common/loading-spinner/LoadingSpinner";
+import Toast from "./components/common/notification/Toast";
+import { UtilityContext, UtilityProvider } from "./contexts/UtilityContext";
 
 type RouteType = {
   path: string;
@@ -40,7 +41,10 @@ function App() {
     }
 
     return (
+      <UtilityProvider>
+
       <Navigation>
+        <Toast />
         <div className="h-[calc(100%-98px-50px)] mt-[54px] relative overflow-hidden ">
           <CreateCustomWorkoutPlanProvider>
             <Routes>
@@ -55,6 +59,8 @@ function App() {
           </CreateCustomWorkoutPlanProvider>
         </div>
       </Navigation>
+      </UtilityProvider>
+
     );
   }
 

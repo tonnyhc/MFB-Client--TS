@@ -5,6 +5,8 @@ import useFormState from "../hooks/useFormState";
 import ProgramNameForm from "../components/custom-program/ProgramNameForm";
 import { CreateCustomWorkoutPlanContext } from "../contexts/CreateCustomWorkoutContext";
 import WorkoutsCreationForm from "../components/custom-program/WorkoutsCreationForm";
+import { useMutation } from "react-query";
+import { createWorkoutPlanRequest } from "../services/workoutServices";
 
 const CustomProgramCreate: React.FC = () => {
   const { workoutPlan, dispatch } = useContext(CreateCustomWorkoutPlanContext);
@@ -14,12 +16,25 @@ const CustomProgramCreate: React.FC = () => {
       numberOfWorkouts: "",
     });
   const [currStep, setCurrStep] = useState(0);
+  const {mutate, isLoading, isError, error} = useMutation(
+    () => createWorkoutPlanRequest(workoutPlan),
+    {
+      onSuccess: (data) => console.log(data),
+      onError: (error) => {
+        alert(error)
+      },
+    }
+  )
 
   const changeStep = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const { id } = e.currentTarget;
 
     if (id === "next") {
+      if (currStep === 1){
+        mutate()
+      }
+
       setCurrStep((currStep) => (currStep += 1));
       currStep === 0 &&
         dispatch({
