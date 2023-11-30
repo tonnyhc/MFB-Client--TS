@@ -1,0 +1,16 @@
+.wrapper {
+  position: fixed;
+  bottom: 105px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+.toast {
+  background-color: #333; /* Dark background color */
+  color: #fff; /* Light text color */
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  opacity: 0.9;
+  transition: opacity 0.3s ease-in-out;
+}
